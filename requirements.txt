@@ -1,0 +1,16 @@
+ultralytics
+opencv-python
+numpy
+pandas
+streamlit
+pillow
+paddleocr
+paddlepaddle
+reportlab
+torch
+torchvision
+scikit-learn
+supervision
+filterpy
+lap
+shapely
