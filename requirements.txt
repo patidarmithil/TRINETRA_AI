@@ -1,11 +1,8 @@
 ultralytics
-opencv-python-headless
 numpy
 pandas
 streamlit
 pillow
-paddleocr
-paddlepaddle
 reportlab
 torch
 torchvision
