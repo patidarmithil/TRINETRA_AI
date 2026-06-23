@@ -1,3 +1,4 @@
+opencv-python-headless
 ultralytics
 numpy
 pandas
@@ -11,3 +12,4 @@ supervision
 filterpy
 lap
 shapely
+
