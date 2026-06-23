@@ -22,7 +22,7 @@ All of this is surfaced through a **Streamlit web dashboard** with a dark-mode U
 ## 🏗️ Project Structure
 
 ```
-gridlock_round_2-main/
+TRINETRA_AI/
 ├── main.py                   # Entry point — launches Streamlit dashboard
 ├── requirements.txt          # Python dependencies
 │
