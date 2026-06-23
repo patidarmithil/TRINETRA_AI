@@ -1,11 +1,9 @@
 ultralytics
-opencv-python-headless
+opencv-python-headless==4.13.0.92
 numpy
 pandas
 streamlit
 pillow
-paddleocr
-paddlepaddle
 reportlab
 torch
 torchvision
