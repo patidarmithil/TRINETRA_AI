@@ -1,5 +1,10 @@
 ultralytics
 opencv-python-headless==4.13.0.92
+
+# 🔥 force removal of conflicting packages
+opencv-python==0.0.0
+opencv-contrib-python==0.0.0
+
 numpy
 pandas
 streamlit
