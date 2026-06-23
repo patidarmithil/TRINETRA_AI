@@ -1,30 +1,28 @@
 import os
-# Disable MKLDNN globally to fix oneDNN PIR attribute compatibility crash in PaddlePaddle
-os.environ["FLAGS_use_mkldnn"] = "0"
-os.environ["PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT"] = "0"
-
-from paddleocr import PaddleOCR
+import easyocr
+import torch
 
 class OCRAgent:
 
     def __init__(self):
-        device = 'cpu'
+        # Use GPU if available via PyTorch
+        use_gpu = torch.cuda.is_available()
+        
         try:
-            import paddle
-            if paddle.device.is_compiled_with_cuda():
-                device = 'gpu'
+            # Initialize EasyOCR with English language
+            self.reader = easyocr.Reader(['en'], gpu=use_gpu)
         except Exception as e:
-            print(f"Error checking paddle GPU compilation: {e}")
-
-        # Initialize PaddleOCR with device and lang parameters only
-        self.ocr = PaddleOCR(device=device, lang='en')
+            print(f"Error initializing EasyOCR: {e}")
+            self.reader = None
 
     def read(self, image_path):
+        if not self.reader:
+            return None
+            
         try:
-            # Under new PaddleX-based PaddleOCR, we can call predict() or ocr()
-            # Let's call ocr() and handle any return format in the pipeline parser
-            result = self.ocr.ocr(image_path)
+            # EasyOCR returns a list of tuples: (bounding_box, text, confidence)
+            result = self.reader.readtext(image_path)
             return result
         except Exception as e:
-            print(f"PaddleOCR read error on {image_path}: {e}")
+            print(f"EasyOCR read error on {image_path}: {e}")
             return None

@@ -24,34 +24,18 @@ class Pipeline:
 
         candidates = []
 
-        # Format A: New PaddleX/PaddleOCR version (list of dicts containing 'rec_texts' and 'rec_scores')
-        if isinstance(ocr_result, list) and len(ocr_result) > 0 and isinstance(ocr_result[0], dict):
-            for res in ocr_result:
-                texts = res.get('rec_texts', [])
-                scores = res.get('rec_scores', [])
-                for text, confidence in zip(texts, scores):
-                    text_str = str(text).strip().replace(" ", "").upper()
-                    # Strip special characters
-                    clean_text = re.sub(r'[^A-Z0-9]', '', text_str)
-                    if len(clean_text) >= 4 and len(clean_text) <= 12:
-                        candidates.append((clean_text, float(confidence)))
-
-        # Format B: Traditional PaddleOCR format (list of lists of [box, (text, confidence)])
-        else:
-            for line in ocr_result:
-                if not line:
-                    continue
-                if isinstance(line, dict):
-                    continue
-                for res in line:
-                    # res format: [ [ [x, y], ... ], (text, confidence) ]
-                    if isinstance(res, (list, tuple)) and len(res) >= 2 and isinstance(res[1], (list, tuple)) and len(res[1]) >= 2:
-                        text = str(res[1][0]).strip().replace(" ", "").upper()
-                        confidence = res[1][1]
-
-                        clean_text = re.sub(r'[^A-Z0-9]', '', text)
-                        if len(clean_text) >= 4 and len(clean_text) <= 12:
-                            candidates.append((clean_text, float(confidence)))
+        # EasyOCR Format: list of tuples (bounding_box, text, confidence)
+        for res in ocr_result:
+            if isinstance(res, (tuple, list)) and len(res) >= 3:
+                box = res[0]
+                text = res[1]
+                confidence = res[2]
+                
+                text_str = str(text).strip().replace(" ", "").upper()
+                # Strip special characters
+                clean_text = re.sub(r'[^A-Z0-9]', '', text_str)
+                if len(clean_text) >= 4 and len(clean_text) <= 12:
+                    candidates.append((clean_text, float(confidence)))
 
         if not candidates:
             return None
